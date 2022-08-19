@@ -100,6 +100,6 @@ Additionaly, you may find the `run.sh` file helpful to run a series of experimen
 for each of the models. Just type in terminal command:
 
 ```
-bash run.sh
+sh run.sh
 ```
 
