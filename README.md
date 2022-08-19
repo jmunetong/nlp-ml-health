@@ -35,11 +35,11 @@ Download repository and use `requirements.txt` file for venv package installatio
 
 ## Objects
 
-### Jacobian Regularizer
+##### NNC_1
 
-#### Hybrid: `rdexcaps.ModelJacobian`
-
-#### SOTA: `sota.ModelJacobian`
+##### NNC_2
+##### NNC_3
+##### NNC_Caps
 
 
 This applies to both Hybrid and Single Output models.
