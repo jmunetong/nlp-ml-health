@@ -6,20 +6,27 @@
 This module/package provides a machine learning pipeline for training and querying claims from the pub-health dataset, which contains valid, false, mixed, and unknown claims. 
 In this pipeline, we implemented 4 customized neural networks for natural language processing, all of which use an embedding layer. Because of limited computing resources for training,transformers from the HuggingFace were not used for these experiments
 
-- ### NNC_1
-- ### NNC_2
-- ### NNC_3
-- ### NNC_Caps
+- ##### NNC_1
+- ##### NNC_2
+- ##### NNC_3
+- ##### NNC_Caps
 
 
 ## Table of Contents 
 
+- [Overview](#overview)
 - [Installation](#installation)
 - [Models](#objects)
 - [Usage](#usage)
 - [License](#license)
 - [References](#references)
 
+
+## Overview
+This module contains a `config.py` file that encompasses the main parameters necessary
+for data-tokenizing and model running. Feel free to modify any of these values in
+the dictionary to customize model output.
+Each experiment outputs a directory with a unique name and id value stored in `/results` directory. Here, you will find a summary of the experiment performance, architecture of the model, weights as an `.hd5` file, and a `.json` file containing the parameters used for the experiment. 
 
 ## Installation
 
