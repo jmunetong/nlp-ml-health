@@ -31,8 +31,6 @@ declare -a Model=('nnc_1' 'nnc_2' 'nnc_3')
 
 for modeler in ${Model[@]}
 do
-   
-    linebreak
     #export CUDA_VISIBLE_DEVICES=0
     echo $model'='$white${modeler} 
     python3 main.py  --model $modeler
