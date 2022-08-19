@@ -27,11 +27,11 @@ This module contains a `config.py` file that encompasses the main parameters nec
 for data-tokenizing and model running. Feel free to modify any of these values in
 the dictionary to customize model output.
 Each experiment outputs a directory with a unique name and id value stored in `/results` directory. Here, you will find a summary of the experiment performance, architecture of the model, weights as an `.hd5` file, and a `.json` file containing the parameters used for the experiment. 
+At the end of an experiment, accuracy and loss will be printed.
 
 ## Installation
 
 Download repository and use `requirements.txt` file for venv package installation
-
 
 ## Objects
 
@@ -54,9 +54,9 @@ of attention weights to selectively increase weights to crucial data transformat
 or decrease otherwise in irrelevant information. This form of architecture has been 
 based on `https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9413635`
 ##### NNC_Caps
-**** Note: This implementation is still UNDER in progress. Algorithm is not fully functional yet*** \
+**** Note: This implementation is still UNDER in progress. Algorithm is not fully functional yet*** 
 
-This neural network is based on Hinton et al. `https://proceedings.neurips.cc/paper/2017/hash/2cad8fa47bbef282badbb8de5374b894-Abstract.html` Dynamic routing capsule neural network. In addition, to this architecture, the goal is to implement a Layer to compute the fast Dynamic Routing Based on Weighted Kernel Density Estimation
+This algorithm is based on a dynamic routing capsule neural network. In addition, to this architecture, the goal is to implement a Layer to compute the fast Dynamic Routing Based on Weighted Kernel Density Estimation
 https://arxiv.org/abs/1805.10807, which may optimize the computation resources for NLP problems. 
 Although the dynamic routing algorithm helps capsules achieve more generalization capacity with few parameters, the disadvantage is the large amount of computational requirements of the capsules during the dynamic routing computation. To address this problem, the framework of weighted kernel density estimation is being implemented.
 
@@ -64,6 +64,8 @@ Models NNC_1, NNC_2, and NNC_3 inherit from a Model_Abstract class found in
 `model_abstract.py`. This has been done because future work in this pipeline will 
 focus on customizing training steps and adding regularization penalties based on
 gradients and Hessian matrix. 
+
+This neural network is based on Hinton et al. `https://proceedings.neurips.cc/paper/2017/hash/2cad8fa47bbef282badbb8de5374b894-Abstract.html`
 
 #### Params (`__init__`)
 
@@ -74,116 +76,30 @@ gradients and Hessian matrix.
 
 For NNC_Caps, the parameters for initializing model are detailed below:
 
+#### Params (`__init__`)
+- `vocab_size` (int): size of vocabulary
+- `num_classes` (int): number of classes in the dataset
+- `dim_capsule` (int): length of capsule of neural network
+- `num_compressed_capsule` (int): reduction of length vector for memory capacity
+- `embedding_dim (int)`: length of embedding vector for input_id mapping
+- `max_length (int)`: maximum sentence length from input_id
+
 
 ## Usage 
 
-- In this section we explain how to use the different regularizer objects. It is assumed that
-the package has been installed in your virtual environment.
-
-#### Importing
-
-```python
-
-from sota import ModelJacobianSota, ModelVATSota, ModelWARSota
-from rdexcaps import ModelJacobianCaps, ModelVATCaps, ModelWARCaps
+- To run an experiment, modify configs.py if in need of customizing training hyperparameters or loss function, etc. To run one experiment use the `main.py`
+file. As follows:
 
 ```
+python3 main.py --model <"model_name">
+```
+Candidates for model names are `nnc_1`,`nnc_2`, and `nnc_3`. Note `nnc_caps`
+is in current development.
 
-
-#### Initializing
-
-```python
-model = Inception# This is your original/untrained/uncompiled model
-model_reg = ModelJacobianSota(model) # pass in your model to the model wrapper for the regularizer
-model = RDEX15
-model_reg_caps = ModelJacobianCaps(model)
-
-########## IMPORTANT #####################3
-# If working with the Wasserstein Regularizer, you need to pass the pre-defined
-# pairwise target class cost matrix M into initialization. This matrix is of
-# dimensions (# classes, # classes) and its diagonal is assumed to be 0 out.
-
-# Example:
-M = [[0, 3.4, 5.6], 
-      [3.4, 0, 2.1], 
-      [5.6, 2.1, 0]]
-
-model_reg = ModelWarSota(model, M)
-
+Additionaly, you may find the `run.sh` file helpful to run a series of experiments
+for each of the models. Just type in terminal command:
 
 ```
-
-#### Training Step
-```python
-# compile the regularized model
-model_reg.compile(optimizer=opt,loss=loss, metrics=['acc'], run_eagerly=True)
-model_reg_caps.compile(optimizer=opt,loss=['cross_entropy', 'recon'], metrics=['acc'], run_eagerly=True)
-
-# Train model: you may add your callbacks here
-xtrain, ytrain = None 
-model_reg.fit(xtrain,ytrain, batch_size=32, epochs=100)
-model_reg_caps.fit([xtrain,ytrain], [ytrain, xtrain], batch_size=32, epochs=100)
-
+bash run.sh
 ```
 
-#### Evaluation Step
-
-```python
-# Testing model
-
-# As you can see we are accessing the model argument and calling predict on 
-# your original model, not the regularized model for the evaluation step.
-xtest,ytest = None
-y_pred = model_reg.model.predict(xtest)
-y_pred = model_reg_caps.model.predict(xtest)
-```
-
-#### Saving Model
-
-```python
-# Saving Model
-trained_model = model_reg.save_weights(
-    filepath, overwrite=True, save_format=None, options=None
-)
-
-```
-
-#### Loading Model
-
-```python
-# Loading model: Do not Instantiate the regularizer, just instantiate your
-# original model (SOTA, Hybrid) and load its weights
-model = DenseNet121()
-model_caps = rdex15()
-
-model.load_weights(filepath)
-model_caps.load_weights(filepath)
-
-```
-
-
-## IMPORTANT NOTES! 
-
-Since it might be useful to save the weights as the model is being trained,
-beaware that the callback for saving the weights has an argument `save_weights_only`.
-This argument must be set to `True` if training models with regularizers. Tensorflow 
-will not allow you to save a subclassed keras Model. This only works for functional
-or Sequential models.
-
-```python
-
-checkpoint = callbacks.ModelCheckpoint(
-        filepath=self.weights_path, 
-        monitor=self.watch, 
-        verbose=0,
-        save_best_only=True, 
-        save_weights_only= True
-        )
-```
-
-
-
-## References:
-[1] https://arxiv.org/abs/1908.02729
-[2] https://arxiv.org/abs/1704.03976
-[3] https://arxiv.org/abs/1904.03936
