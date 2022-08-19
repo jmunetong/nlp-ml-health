@@ -35,95 +35,43 @@ Download repository and use `requirements.txt` file for venv package installatio
 
 ## Objects
 
+The algorithms used in this pipeline can be found in `/models` folder. Note, each
+of these algorithms contains a UnitTest.
+
 ##### NNC_1
+A small natural-language based neural network containing an embedding layer for
+input-id mappings. As a baseline model, it only contains one convolution. Data
+is thenprojected into a GlobalMaxpooling layer, and a classifier block.
 
 ##### NNC_2
+An extension model from NNC_1: It includes 4 convolutions with MaxPooling layers
+within each other
+
 ##### NNC_3
+NNC_3 is also a convolutional-based algorithm with an embedding layer for input_id mappings. This algorithm has a hierarchical based convolutional structure with causal layers that allow for dilation and an enlargement of the receptive fields as it goes 
+deeper in the convolutions. The output of each convolution is passed to a set 
+of attention weights to selectively increase weights to crucial data transformation
+or decrease otherwise in irrelevant information. This form of architecture has been 
+based on `https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9413635`
 ##### NNC_Caps
+**** Note: This implementation is still UNDER in progress. Algorithm is not fully functional yet***
+This neural network is based on Hinton et al. `https://proceedings.neurips.cc/paper/2017/hash/2cad8fa47bbef282badbb8de5374b894-Abstract.html` Dynamic routing capsule neural network. In addition, to this architecture, the goal is to implement a Layer to compute the fast Dynamic Routing Based on Weighted Kernel Density Estimation
+https://arxiv.org/abs/1805.10807, which may optimize the computation resources for NLP problems. 
+Although the dynamic routing algorithm helps capsules achieve more generalization capacity with few parameters, the disadvantage is the large amount of computational requirements of the capsules during the dynamic routing computation. To address this problem, the framework of weighted kernel density estimation is being implemented.
 
-
-This applies to both Hybrid and Single Output models.
+Models NNC_1, NNC_2, and NNC_3 inherit from a Model_Abstract class found in
+`model_abstract.py`. This has been done because future work in this pipeline will 
+focus on customizing training steps and adding regularization penalties based on
+gradients and Hessian matrix. 
 
 #### Params (`__init__`)
-- `model`: (tf.keras.model) model used for training 
-- `input_shape`: tuple(ints) [height, width, channels], shape of the data
+
+- `input_shape`: (int) shape of one observation
 - `n_classes`: (int) number of classes in dataset
-- `lambda_JR`: (float) importance parameter for jacobian regularization. Default 0.01
-- `n_proj`: (int) number of projections. It should also
-            be greater than 0 and less than sqrt(# of classes). We can also set 
-            it to be n_proj=-1 to compute the full jacobian which is computa-tionally
-            expensive. Default 10
-- `spectral`: (bool, optional)
-            whether creating random projections or doing one pass computation 
-            with jacobian. True creates random projections. Default True
-- `**kwargs`: (optional)
+- `vocab_size`: (int) length of the vocabulary size for the embedding layer
+- `embedding_dim`: (int) embedding output dimension
 
-### Virtual Adversarial Regularizer
-
-#### Hybrid: `rdexcaps.ModelVAT`
-
-#### SOTA: `sota.ModelVAT`
-
-This applies to both Hybrid and Single Output models.
-
-### Params (`__init__`)
-- `model`: (tf.keras.model) model used for training 
-- `input_shape`: tuple(ints) [height, width, channels], shape of the data
-- `n_classes`: (int) number of classes in dataset
-- `eps`: (float) epsilon constraint upper bound value for the amount of perturbation
-            allowed. Default 0.05
-- `n_iter`: (int) 
-            number of iterations for identifying direction vector. Default 1
-- `alpha`: (float)
-            weight of VAT regularization term that will be added to classifier's
-            loss function. Default 0.05
-- `xi`: float (optional)
-            normalization constraint for normalizing d vector. Default 1e-6
-- `**kwargs`: (optional)
-
-
-### Wasserstein Adversarial Regularizer
-
-#### Hybrid: `rdexcaps.ModelWAR`
-
-#### SOTA: `sota.ModelWAR`
-
-This applies to both Hybrid and Single Output models.
-
-### Params (`__init__`)
-- `model`: (tf.keras.model) model used for training 
-- `M`: (np.ndarray or tf.tensor) (dimensions: (n_classes, n_classes)
-        matrix that contained the pre-defined pair-wise class cost from moving 
-        distributional properties from one class to the other. 
-        The ground cost C reflects the geometry of the label space. One approach for 
-        computing the ground cost is to use the prior labels (the one-hot-encoded)
-        training labels from the training dataset used, and add noise to them 
-        examples include label smoothing.  Other approaches
-        include using a variational autoencoder for embeddings on the data and
-        then compute the class-wise euclidean distance. IMPORTANT: It is assume that the diagonal of this 
-        matrix is composed of zeros!!!!
-- `input_shape`: tuple(ints) [height, width, channels], shape of the data
-- `n_classes`: (int) number of classes in dataset
-- `eps`: (float) 
-        epsilon constraint upper bound value for the amount of perturbation
-        allowed. Default 2.5
-- `n_iter`: (int) 
-         number of iterations for computing d perturbation vector in method __war_loss
-         Default 1.  
-- `alpha`: (float)
-        importance value added in the total loss for the WAR regularizer in 
-        the classifier's loss function prior to computing the gradients. Default
-        1.0
-- `xi`: float (optional)
-        normalization constraint for normalizing d vector. Default 1e-6
-- `nb_loops`: int (optional)
-        number of iterations to compute P in __sikhorn loss method. Default
-        5
-- `lambda_reg`: float (optional)
-        Entropic Regularization term for Sinkhorn loss. Default 0.05.
-        Note: Do not make this number too small. It might send sinkhorn loss to
-        nan
-- `**kwargs`: (optional)
+For NNC_Caps, the parameters for initializing model are detailed below:
 
 
 ## Usage 
