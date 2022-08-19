@@ -69,17 +69,17 @@ This neural network is based on Hinton et al. `https://proceedings.neurips.cc/pa
 
 #### Params (`__init__`)
 
-- `input_shape` (int): shape of one observation
-- `n_classes` (int): number of classes in dataset
-- `vocab_size`(int): length of the vocabulary size for the embedding layer
-- `embedding_dim`(int): embedding output dimension
+- `input_shape (int)`: shape of one observation
+- `n_classes (int)`: number of classes in dataset
+- `vocab_size (int)`: length of the vocabulary size for the embedding layer
+- `embedding_dim (int)`: embedding output dimension
 
 For NNC_Caps, the parameters for initializing model are detailed below:
 
 #### Params (`__init__`)
-- `vocab_size` (int): size of vocabulary
-- `num_classes` (int): number of classes in the dataset
-- `dim_capsule` (int): length of capsule of neural network
+- `vocab_size (int)`: size of vocabulary
+- `num_classes (int)`: number of classes in the dataset
+- `dim_capsule (int)`: length of capsule of neural network
 - `num_compressed_capsule` (int): reduction of length vector for memory capacity
 - `embedding_dim (int)`: length of embedding vector for input_id mapping
 - `max_length (int)`: maximum sentence length from input_id
