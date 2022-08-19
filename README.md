@@ -54,7 +54,8 @@ of attention weights to selectively increase weights to crucial data transformat
 or decrease otherwise in irrelevant information. This form of architecture has been 
 based on `https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9413635`
 ##### NNC_Caps
-**** Note: This implementation is still UNDER in progress. Algorithm is not fully functional yet***
+**** Note: This implementation is still UNDER in progress. Algorithm is not fully functional yet*** \
+
 This neural network is based on Hinton et al. `https://proceedings.neurips.cc/paper/2017/hash/2cad8fa47bbef282badbb8de5374b894-Abstract.html` Dynamic routing capsule neural network. In addition, to this architecture, the goal is to implement a Layer to compute the fast Dynamic Routing Based on Weighted Kernel Density Estimation
 https://arxiv.org/abs/1805.10807, which may optimize the computation resources for NLP problems. 
 Although the dynamic routing algorithm helps capsules achieve more generalization capacity with few parameters, the disadvantage is the large amount of computational requirements of the capsules during the dynamic routing computation. To address this problem, the framework of weighted kernel density estimation is being implemented.
