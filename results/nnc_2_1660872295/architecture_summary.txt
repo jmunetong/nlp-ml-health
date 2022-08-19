@@ -1,0 +1,41 @@
+Model: "model"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_1 (InputLayer)        [(None, 512)]             0         
+                                                                 
+ tf.cast (TFOpLambda)        (None, 512)               0         
+                                                                 
+ embedding (Embedding)       (None, 512, 120)          3662640   
+                                                                 
+ conv1d (Conv1D)             (None, 511, 128)          30848     
+                                                                 
+ conv1d_1 (Conv1D)           (None, 510, 256)          65792     
+                                                                 
+ max_pooling1d (MaxPooling1D  (None, 85, 256)          0         
+ )                                                               
+                                                                 
+ conv1d_2 (Conv1D)           (None, 84, 512)           262656    
+                                                                 
+ max_pooling1d_1 (MaxPooling  (None, 14, 512)          0         
+ 1D)                                                             
+                                                                 
+ conv1d_3 (Conv1D)           (None, 13, 1024)          1049600   
+                                                                 
+ max_pooling1d_2 (MaxPooling  (None, 6, 1024)          0         
+ 1D)                                                             
+                                                                 
+ global_max_pooling1d (Globa  (None, 1024)             0         
+ lMaxPooling1D)                                                  
+                                                                 
+ dense (Dense)               (None, 2048)              2099200   
+                                                                 
+ dropout (Dropout)           (None, 2048)              0         
+                                                                 
+ dense_1 (Dense)             (None, 5)                 10245     
+                                                                 
+=================================================================
+Total params: 7,180,981
+Trainable params: 7,180,981
+Non-trainable params: 0
+_________________________________________________________________

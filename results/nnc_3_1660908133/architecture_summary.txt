@@ -1,0 +1,49 @@
+Model: "model"
+__________________________________________________________________________________________________
+ Layer (type)                   Output Shape         Param #     Connected to                     
+==================================================================================================
+ input_1 (InputLayer)           [(None, 512)]        0           []                               
+                                                                                                  
+ tf.cast (TFOpLambda)           (None, 512)          0           ['input_1[0][0]']                
+                                                                                                  
+ embedding (Embedding)          (None, 512, 120)     3662640     ['tf.cast[0][0]']                
+                                                                                                  
+ conv1d (Conv1D)                (None, 512, 128)     46208       ['embedding[0][0]']              
+                                                                                                  
+ conv1d_1 (Conv1D)              (None, 512, 256)     92416       ['embedding[0][0]']              
+                                                                                                  
+ conv1d_2 (Conv1D)              (None, 512, 512)     184832      ['embedding[0][0]']              
+                                                                                                  
+ conv1d_3 (Conv1D)              (None, 512, 1024)    369664      ['embedding[0][0]']              
+                                                                                                  
+ attention_weighter (AttentionW  (None, 1, 128)      128         ['conv1d[0][0]']                 
+ eighter)                                                                                         
+                                                                                                  
+ attention_weighter_1 (Attentio  (None, 1, 256)      256         ['conv1d_1[0][0]']               
+ nWeighter)                                                                                       
+                                                                                                  
+ attention_weighter_2 (Attentio  (None, 1, 512)      512         ['conv1d_2[0][0]']               
+ nWeighter)                                                                                       
+                                                                                                  
+ attention_weighter_3 (Attentio  (None, 1, 1024)     1024        ['conv1d_3[0][0]']               
+ nWeighter)                                                                                       
+                                                                                                  
+ concatenate (Concatenate)      (None, 1, 1920)      0           ['attention_weighter[0][0]',     
+                                                                  'attention_weighter_1[0][0]',   
+                                                                  'attention_weighter_2[0][0]',   
+                                                                  'attention_weighter_3[0][0]']   
+                                                                                                  
+ attention_weighter_4 (Attentio  (None, 1, 1920)     1920        ['concatenate[0][0]']            
+ nWeighter)                                                                                       
+                                                                                                  
+ flatten (Flatten)              (None, 1920)         0           ['attention_weighter_4[0][0]']   
+                                                                                                  
+ dense (Dense)                  (None, 1024)         1967104     ['flatten[0][0]']                
+                                                                                                  
+ dense_1 (Dense)                (None, 5)            5125        ['dense[0][0]']                  
+                                                                                                  
+==================================================================================================
+Total params: 6,331,829
+Trainable params: 6,331,829
+Non-trainable params: 0
+__________________________________________________________________________________________________
